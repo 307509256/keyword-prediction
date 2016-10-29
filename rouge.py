@@ -22,8 +22,8 @@ for fn in os.listdir(decode_dir):
 n_lines = min(len(dec), len(ref))
 scores = {}
 for i in xrange(n_lines):
-    ref_line = top_k(ref[i], 10)
-    dec_line = top_k(dec[i], 10)
+    ref_line = top_k(ref[i], 5)
+    dec_line = top_k(dec[i], 5)
     score = rouge.score_summary(dec_line, {'A': ref_line})
     for m in metrics:
         s = scores.setdefault(m, 0.)

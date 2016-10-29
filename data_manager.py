@@ -118,12 +118,12 @@ class DataManager(object):
                 orig_keywords[i] = keywords
                 for j in xrange(dec_output_len):
                     loss_weights[i][j] = 1
-            if mode == 'train':
-                idx = (idx + batch_size)%len(data)
-            else:
-                idx += batch_size
-                if idx >= len(data):
-                    break 
+            #if mode == 'train':
+            #    idx = (idx + batch_size)%len(data)
+            #else:
+            idx += batch_size
+            if idx >= len(data):
+                break 
             yield (enc_batch, dec_batch, target_batch, enc_input_lens, dec_output_lens, 
                     loss_weights, orig_abstracts, orig_keywords)
 
@@ -137,7 +137,9 @@ class DataManager(object):
         num_kw = self._cfg.num_kw
         start_id = self._vocab.get_word_id(START_TOKEN)
         end_id = self._vocab.get_word_id(END_TOKEN)
-        docs = [d for d in db[self._cfg.mode].find()][:500]
+        docs = [d for d in db[self._cfg.mode].find()]
+        if self._cfg.mode == 'eval':
+            docs = docs[:500]
         #docs = [d for d in db['train'].find()][:500]
         for d in docs:
             sorted_kws = self._sort_keywords_by_freq(

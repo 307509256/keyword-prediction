@@ -293,6 +293,26 @@ class Seq2SeqAttentionModel(object):
                                   self._dropout: 1.})
     return results[0], results[1][0]
 
+  def get_topk_ids(self, sess, enc_inputs, enc_len):
+    """Return the top states from encoder for decoder.
+
+    Args:
+      sess: tensorflow session.
+      enc_inputs: encoder inputs of shape [batch_size, enc_timesteps].
+      enc_len: encoder input length of shape [batch_size]
+    Returns:
+      enc_top_states: The top level encoder states.
+      dec_in_state: The decoder layer initial state.
+    """
+    results = sess.run([self._topk_ids, self._dec_in_state],
+                       feed_dict={self._articles: enc_inputs,
+                                  self._article_lens: enc_len,
+                                  self._dropout: 1.})
+
+    return results[0], results[1][0]
+
+    
+
   def decode_topk(self, sess, latest_tokens, enc_top_states, dec_init_states):
     """Return the topK results and new decoder states."""
     feed = {

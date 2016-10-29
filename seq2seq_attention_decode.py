@@ -125,8 +125,17 @@ class BSDecoder(object):
 
     self._decode_io.ResetFiles()
     for b in self._batch_reader.data_iterator():
-      (article_batch, _, _, article_lens, _, _, origin_articles,
-       origin_abstracts) = b
+      (article_batch, abstract_batch, targets, article_lens, 
+        abstract_lens, loss_weights, 
+        origin_articles, origin_abstracts) = b
+      '''
+      outputs, _ = self._model.run_decode_step(sess, 
+        article_batch, abstract_batch, 
+        targets, article_lens, abstract_lens, loss_weights)
+      for i in xrange(self._hps.batch_size):
+          print outputs[i]
+          self._DecodeBatch(origin_articles[i], origin_abstracts[i], outputs[i])
+      '''
       for i in xrange(self._hps.batch_size):
         bs = beam_search.BeamSearch(
             self._model, self._hps.batch_size,
