@@ -113,10 +113,6 @@ def _Train(model, data_batcher, eval_batcher, dropout):
     for b in data_batcher.data_iterator():
       (article_batch, abstract_batch, targets, article_lens, abstract_lens,
           loss_weights, _, _) = b
-      for article in article_batch:
-          sys.stdout.write(' '.join(vocab.get_words(article)) + '\n')
-      for abstract in abstract_batch:
-          sys.stdout.write(' '.join(vocab.get_words(abstract)) + '\n')
       (_, summaries, loss, train_step) = model.run_train_step(
           sess, article_batch, abstract_batch, targets, article_lens,
           abstract_lens, loss_weights, dropout)
@@ -129,6 +125,7 @@ def _Train(model, data_batcher, eval_batcher, dropout):
     sys.stdout.write('Start evaluating\n')
     sys.stdout.flush()
     # start eval 
+    '''
     step = 0
     for b in eval_batcher.data_iterator():
       (article_batch, abstract_batch, targets, article_lens, abstract_lens,
@@ -147,10 +144,11 @@ def _Train(model, data_batcher, eval_batcher, dropout):
         best_avg_loss = eval_avg_loss 
     else:
         break
+    '''
     epoch += 1
 
   sv.Stop()
-  return eval_avg_loss
+  return train_avg_loss
 
 def main(unused_argv):
   hps = seq2seq_attention_model.HParams(
@@ -158,11 +156,11 @@ def main(unused_argv):
       min_lr=0.01,  # min learning rate.
       lr=0.15,  # learning rate
       batch_size=4, 
-      enc_layers=2,
-      enc_timesteps=120,
-      dec_timesteps=30,
+      enc_layers=4,
+      enc_timesteps=80,
+      dec_timesteps=20,
       min_input_len=2,  # discard articles/summaries < than this
-      num_hidden=128,  # for rnn cell
+      num_hidden=256,  # for rnn cell
       emb_dim=128,  # If 0, don't use embedding
       max_grad_norm=2,
       num_softmax_samples=4096,
