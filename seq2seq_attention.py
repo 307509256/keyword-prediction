@@ -122,6 +122,7 @@ def _Train(model, data_batcher, eval_batcher, dropout):
       step += 1
       if step % 100 == 0:
         summary_writer.flush()
+    '''
     sys.stdout.write('Start evaluating\n')
     sys.stdout.flush()
     # start eval 
@@ -146,6 +147,7 @@ def _Train(model, data_batcher, eval_batcher, dropout):
         break
     '''
     epoch += 1
+    '''
 
   sv.Stop()
   return train_avg_loss
