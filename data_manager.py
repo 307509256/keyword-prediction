@@ -137,7 +137,8 @@ class DataManager(object):
         num_kw = self._cfg.num_kw
         start_id = self._vocab.get_word_id(START_TOKEN)
         end_id = self._vocab.get_word_id(END_TOKEN)
-        docs = [d for d in db[self._cfg.mode].find()]
+        docs = [d for d in db[self._cfg.mode].find()][:1000]
+        #docs = [d for d in db['train'].find()][:1000]
         if self._cfg.mode == 'eval':
             docs = docs[:500]
         #docs = [d for d in db['train'].find()][:500]
